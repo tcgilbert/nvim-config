@@ -8,13 +8,16 @@ return {
 		"folke/todo-comments.nvim",
 	},
 	config = function()
-  	local telescope = require("telescope")
+		local telescope = require("telescope")
 		local actions = require("telescope.actions")
 
 		telescope.setup({
 			defaults = {
 				-- path_display = { "absolute" },
 				initial_mode = "normal",
+				file_ignore_patterns = {
+					"node_modules",
+				},
 				pickers = {
 					oldfiles = {
 						cwd_only = true,
