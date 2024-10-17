@@ -8,6 +8,12 @@ return {
 	},
 	config = function()
 		require("neo-tree").setup({
+			window = {
+				mappings = {
+					["Z"] = "close_all_nodes",
+					["z"] = "noop",
+				},
+			},
 			filesystem = {
 				hijack_netrw_behavior = "open_current",
 			},
