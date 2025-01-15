@@ -12,14 +12,14 @@ return {
 			build = "make install_jsregexp",
 		},
 		"saadparwaiz1/cmp_luasnip", -- for autocompletion
-		-- "rafamadriz/friendly-snippets", -- useful snippets
+		"rafamadriz/friendly-snippets", -- useful snippets
 	},
 	config = function()
 		local cmp = require("cmp")
 		local luasnip = require("luasnip")
 
 		-- loads vscode style snippets from installed plugins (e.g. friendly-snippets)
-		-- require("luasnip.loaders.from_vscode").lazy_load()
+		require("luasnip.loaders.from_vscode").lazy_load()
 
 		-- Define snippets here
 		local s = luasnip.snippet

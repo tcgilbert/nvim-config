@@ -17,6 +17,7 @@ return {
 		local cmp_nvim_lsp = require("cmp_nvim_lsp")
 
 		local keymap = vim.keymap -- for conciseness
+
 		-- Function to toggle diagnostics
 		local diagnostics_enabled = true
 		local function toggle_diagnostics()
@@ -27,6 +28,12 @@ return {
 			end
 			diagnostics_enabled = not diagnostics_enabled
 		end
+
+    vim.diagnostic.config({
+      virtual_text = {
+        source = true
+      }
+    })
 
 		vim.api.nvim_create_autocmd("LspAttach", {
 			group = vim.api.nvim_create_augroup("UserLspConfig", {}),
@@ -78,7 +85,6 @@ return {
 		local capabilities = cmp_nvim_lsp.default_capabilities()
 
 		-- Change the Diagnostic symbols in the sign column (gutter)
-		-- (not in youtube nvim video)
 		local signs = { Error = " ", Warn = " ", Hint = "󰠠 ", Info = " " }
 		for type, icon in pairs(signs) do
 			local hl = "DiagnosticSign" .. type
@@ -90,21 +96,6 @@ return {
 			function(server_name)
 				lspconfig[server_name].setup({
 					capabilities = capabilities,
-				})
-			end,
-			["svelte"] = function()
-				-- configure svelte server
-				lspconfig["svelte"].setup({
-					capabilities = capabilities,
-					on_attach = function(client, bufnr)
-						vim.api.nvim_create_autocmd("BufWritePost", {
-							pattern = { "*.js", "*.ts" },
-							callback = function(ctx)
-								-- Here use ctx.match instead of ctx.file
-								client.notify("$/onDidChangeTsOrJsFile", { uri = ctx.match })
-							end,
-						})
-					end,
 				})
 			end,
 			["graphql"] = function()
@@ -142,6 +133,54 @@ return {
 							},
 							completion = {
 								callSnippet = "Replace",
+							},
+						},
+					},
+				})
+			end,
+			["jsonls"] = function()
+				-- enable snippet support for jsonls
+				capabilities.textDocument.completion.completionItem.snippetSupport = true
+
+				-- configure lua server (with special settings)
+				lspconfig["jsonls"].setup({
+					capabilities = capabilities,
+
+					settings = {
+						json = {
+							schemas = {
+								{
+									fileMatch = { "package.json" },
+									url = "https://json.schemastore.org/package.json",
+								},
+								{
+									fileMatch = { "tsconfig*.json" },
+									url = "https://json.schemastore.org/tsconfig.json",
+								},
+								{
+									fileMatch = { ".prettierrc", ".prettierrc.json", "prettier.config.json" },
+									url = "https://json.schemastore.org/prettierrc.json",
+								},
+								{
+									fileMatch = { ".eslintrc", ".eslintrc.json" },
+									url = "https://json.schemastore.org/eslintrc.json",
+								},
+								{
+									fileMatch = { ".babelrc", ".babelrc.json", "babel.config.json" },
+									url = "https://json.schemastore.org/babelrc.json",
+								},
+								{
+									fileMatch = { "lerna.json" },
+									url = "https://json.schemastore.org/lerna.json",
+								},
+								{
+									fileMatch = { "now.json", "vercel.json" },
+									url = "https://json.schemastore.org/now.json",
+								},
+								{
+									fileMatch = { "ecosystem.json" },
+									url = "https://json.schemastore.org/pm2-ecosystem.json",
+								},
 							},
 						},
 					},
