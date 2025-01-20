@@ -21,3 +21,6 @@ keymap.set("n", "<leader>tp", "<cmd>tabp<CR>", { desc = "Go to previous tab" }) 
 
 -- toggle text wrap
 keymap.set("n", "<leader>tw", ":set wrap!<CR>", { desc = "Toggle text wrapping" })
+
+-- preserve yanked text when pasting in visual mode
+keymap.set("x", "p", "pgvy", { desc = "Paste and preserve register in visual mode" })

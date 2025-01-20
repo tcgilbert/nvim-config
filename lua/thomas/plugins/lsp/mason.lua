@@ -37,6 +37,7 @@ return {
 				"emmet_ls",
 				"pyright",
 			},
+			automatic_installation = true, -- Add this line
 		})
 
 		mason_tool_installer.setup({
